@@ -394,8 +394,10 @@ void target_init(void)
 		target_crypto_init_params();
 
 	/* Vibrator start */
-        dprintf(INFO, "calling vibrator enable\n");
-        vibrator_enable();
+	if (!target_pause_for_battery_charge()){
+		dprintf(INFO, "calling vibrator enable\n");
+		vibrator_enable();
+	}
 	/* Vibrator end */
 
 	/*
