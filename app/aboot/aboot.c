@@ -1739,6 +1739,8 @@ void cmd_flash_mmc_sparse_img(const char *arg, void *data, unsigned sz)
 	unsigned long long ptn = 0;
 	unsigned long long size = 0;
 	int index = INVALID_PTN;
+	/*End of the sparse image address*/
+	uint32_t data_end = (uint32_t)data + sz;
 
 	index = partition_get_index(arg);
 	ptn = partition_get_offset(index);
@@ -1748,8 +1750,8 @@ void cmd_flash_mmc_sparse_img(const char *arg, void *data, unsigned sz)
 	}
 
 	size = partition_get_size(index);
-	if (ROUND_TO_PAGE(sz,511) > size) {
-		fastboot_fail("size too large");
+	if (sz < sizeof(sparse_header_t)) {
+		fastboot_fail("size too low");
 		return;
 	}
 
@@ -1761,12 +1763,21 @@ void cmd_flash_mmc_sparse_img(const char *arg, void *data, unsigned sz)
 	}
 
 	data += sparse_header->file_hdr_sz;
+	if (data_end < (uint32_t)data) {
+		fastboot_fail("buffer overreads occured due to invalid sparse header");
+		return;
+	}
+ 
 	if(sparse_header->file_hdr_sz > sizeof(sparse_header_t))
 	{
 		/* Skip the remaining bytes in a header that is longer than
 		 * we expected.
 		 */
 		data += (sparse_header->file_hdr_sz - sizeof(sparse_header_t));
+	}
+	if (data_end < (uint32_t)data) {
+		fastboot_fail("buffer overreads occured due to invalid sparse header");
+		return;
 	}
 
 	dprintf (SPEW, "=== Sparse Image Header ===\n");
