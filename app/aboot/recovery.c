@@ -433,8 +433,11 @@ int _emmc_recovery_init(void)
 	struct recovery_message msg;
 
 	// get recovery message
-	if(emmc_get_recovery_msg(&msg))
-		return -1;
+
+    // We don't have misc partition for this product.
+    // if(emmc_get_recovery_msg(&msg))
+    return -1;
+
 	msg.command[sizeof(msg.command)-1] = '\0'; //Ensure termination
 	if (msg.command[0] != 0 && msg.command[0] != 255) {
 		dprintf(INFO,"Recovery command: %d %s\n",
@@ -474,8 +477,10 @@ int _emmc_recovery_init(void)
 		return 0;	// do nothing
 
 	strlcpy(msg.command, "", sizeof(msg.command));	// clearing recovery command
-	emmc_set_recovery_msg(&msg);	// send recovery message
-	return 0;
+    // We don't have misc partition for this product.
+    //emmc_set_recovery_msg(&msg);	// send recovery message
+
+    return 0;
 }
 
 static int read_misc(unsigned page_offset, void *buf, unsigned size)
@@ -629,12 +634,13 @@ int get_ffbm(char *ffbm, unsigned size)
 		retval = -1;
 		goto cleanup;
 	}
-	if (read_misc(0, ffbm_page_buffer, page_size))
-	{
-		dprintf(CRITICAL, "Error reading MISC partition\n");
-		retval = -1;
-		goto cleanup;
-	}
+    // We don't have misc partition for this product.
+    // if (read_misc(0, ffbm_page_buffer, page_size))
+    //{
+        // dprintf(CRITICAL, "Error reading MISC partition\n");
+        retval = -1;
+        goto cleanup;
+    //}
 	ffbm_page_buffer[size] = '\0';
 	if (strncmp(ffbm_cmd, ffbm_page_buffer, strlen(ffbm_cmd)))
 	{
