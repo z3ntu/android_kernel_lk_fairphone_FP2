@@ -503,9 +503,9 @@ int mdss_dsi_panel_initialize(struct mipi_dsi_panel_config *pinfo, uint32_t
 		} else {
 			status = mipi_dsi_cmds_tx(pinfo->panel_cmds,
 					pinfo->num_of_panel_cmds);
-			if (!status && target_panel_auto_detect_enabled())
-				status =
-					mdss_dsi_read_panel_signature(pinfo->signature);
+		//	if (!status && target_panel_auto_detect_enabled())
+		//		status =
+		//			mdss_dsi_read_panel_signature(pinfo->signature);
 		}
 	}
 #endif

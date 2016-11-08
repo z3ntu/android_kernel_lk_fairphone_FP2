@@ -100,7 +100,7 @@ static int mdss_dsi_panel_power(uint8_t enable)
 			dprintf(CRITICAL, "LDO control enable failed \n");
 			return ret;
 		}
-
+		mdelay(10);
 		/* Panel Reset */
 		ret = mdss_dsi_panel_reset(enable);
 		if (ret) {

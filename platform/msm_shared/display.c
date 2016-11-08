@@ -239,7 +239,12 @@ msm_display_on_out:
 int msm_display_init(struct msm_fb_panel_data *pdata)
 {
 	int ret = NO_ERROR;
-
+	static char bl_ctl[] = {
+	0x02, 0x00, 0x29, 0xC0,
+	0x51, 0xFF, 0xFF, 0xFF,  };
+	static struct mipi_dsi_cmd bl_ctl_cmd[] = {
+	{ 0x8 , bl_ctl ,0x01},
+	};
 	panel = pdata;
 	if (!panel) {
 		ret = ERR_INVALID_ARGS;
@@ -290,7 +295,8 @@ int msm_display_init(struct msm_fb_panel_data *pdata)
 	ret = msm_display_on();
 	if (ret)
 		goto msm_display_init_out;
-
+	mdelay(50);
+	mipi_dsi_cmds_tx(&bl_ctl_cmd,1);
 	/* Turn on backlight */
 	if (pdata->bl_func)
 		ret = pdata->bl_func(1);

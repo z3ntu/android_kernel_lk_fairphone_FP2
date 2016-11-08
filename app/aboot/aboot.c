@@ -952,7 +952,7 @@ int boot_linux_from_mmc(void)
 			return -1;
 		}
 
-		verify_signed_bootimg(image_addr, imagesize_actual);
+	//	verify_signed_bootimg(image_addr, imagesize_actual);
 
 		/* Move kernel, ramdisk and device tree to correct address */
 		memmove((void*) hdr->kernel_addr, (char *)(image_addr + page_size), hdr->kernel_size);
@@ -1273,7 +1273,7 @@ int boot_linux_from_flash(void)
 			return -1;
 		}
 
-		verify_signed_bootimg(image_addr, imagesize_actual);
+		//verify_signed_bootimg(image_addr, imagesize_actual);
 
 		/* Move kernel and ramdisk to correct address */
 		memmove((void*) hdr->kernel_addr, (char *)(image_addr + page_size), hdr->kernel_size);
@@ -1446,7 +1446,7 @@ void read_device_info_mmc(device_info *dev)
 		memcpy(info->magic, DEVICE_MAGIC, DEVICE_MAGIC_SIZE);
 		info->is_unlocked = 0;
 		info->is_tampered = 0;
-		info->charger_screen_enabled = 0;
+		info->charger_screen_enabled = 1;
 #if VERIFIED_BOOT
 		info->verity_mode = 1;
 #endif
@@ -1671,7 +1671,7 @@ void cmd_boot(const char *arg, void *data, unsigned sz)
 		/* Pass size excluding signature size, otherwise we would try to
 		 * access signature beyond its length
 		 */
-		verify_signed_bootimg((uint32_t)data, (image_actual - sig_actual));
+		//verify_signed_bootimg((uint32_t)data, (image_actual - sig_actual));
 
 	/*
 	 * Update the kernel/ramdisk/tags address if the boot image header
