@@ -134,7 +134,9 @@ static bool boot_into_ffbm;
 /* Assuming unauthorized kernel image by default */
 static int auth_kernel_img = 0;
 
-static device_info device = {DEVICE_MAGIC, 0, 0, 0, 0};
+#define DDR_VERSION 1
+
+static device_info device = {DEVICE_MAGIC, 0, 0, 0, 0, 0};
 
 struct atag_ptbl_entry
 {
@@ -1653,6 +1655,26 @@ void cmd_erase_nand(const char *arg, void *data, unsigned sz)
 	fastboot_okay("");
 }
 
+void DDR_Erase(void)
+{
+  dprintf(CRITICAL,"%s(%d):current DDR Version:%d, target DDR Version:%d\n", __FUNCTION__, __LINE__, device.ddr_version, DDR_VERSION);
+
+  //not using >, because we may use more than 255 versions of DDR configs.......
+  if(device.ddr_version != DDR_VERSION)
+  {
+    dprintf(CRITICAL,"%s(%d):Start erasing DDR\n", __FUNCTION__, __LINE__);
+    cmd_erase_mmc("DDR", NULL, 0);
+    dprintf(CRITICAL,"%s(%d):erasing DDR Done\n", __FUNCTION__, __LINE__);
+
+    device.ddr_version=DDR_VERSION;
+    write_device_info(&device);
+
+    /* keep it for debugging only */
+    //read_device_info(&device);
+    //dprintf(CRITICAL,"%s(%d):current DDR Version:%d, target DDR Version:%d\n", __FUNCTION__, __LINE__, device.ddr_version, DDR_VERSION);
+    reboot_device(0);
+  }
+}
 
 void cmd_erase_mmc(const char *arg, void *data, unsigned sz)
 {
@@ -2389,7 +2411,7 @@ void aboot_init(const struct app_descriptor *app)
 	ASSERT((MEMBASE + MEMSIZE) > MEMBASE);
 
 	read_device_info(&device);
-
+    DDR_Erase();
 	/* Display splash screen if enabled */
 #if DISPLAY_SPLASH_SCREEN
 	dprintf(SPEW, "Display Init: Start\n");
