@@ -47,6 +47,7 @@
 #include "include/panel_jdi_qhd_dualdsi_video.h"
 #include "include/panel_jdi_qhd_dualdsi_cmd.h"
 #include "include/panel_otm1902b_1080p_cmd.h"
+#include "include/panel_s6d6fa1_1080p_video.h"
 
 #define DISPLAY_MAX_PANEL_DETECTION 3
 
@@ -61,6 +62,7 @@ GENERIC_720P_CMD_PANEL,
 JDI_QHD_DUALDSI_VIDEO_PANEL,
 JDI_QHD_DUALDSI_CMD_PANEL,
 OTM1902B_1080P_CMD_PANEL,
+S6D6FA1_1080P_VIDEO_PANEL,
 UNKNOWN_PANEL
 };
 
@@ -76,6 +78,7 @@ static struct panel_list supp_panels[] = {
 	{"jdi_qhd_dualdsi_video", JDI_QHD_DUALDSI_VIDEO_PANEL},
 	{"jdi_qhd_dualdsi_cmd", JDI_QHD_DUALDSI_CMD_PANEL},
 	{"otm1902b_1080p_cmd",OTM1902B_1080P_CMD_PANEL},
+	{"s6d6fa1_1080p_video", S6D6FA1_1080P_VIDEO_PANEL},
 };
 
 static uint32_t panel_id;
@@ -250,6 +253,27 @@ static void init_panel_data(struct panel_struct *panelstruct,
 		memcpy(phy_db->timing,
 			otm1902b_1080p_cmd_timings, TIMING_SIZE);
 		break;
+	case S6D6FA1_1080P_VIDEO_PANEL:
+		panelstruct->paneldata    = &s6d6fa1_1080p_video_panel_data;
+		panelstruct->panelres     = &s6d6fa1_1080p_video_panel_res;
+		panelstruct->color        = &s6d6fa1_1080p_video_color;
+		panelstruct->videopanel   = &s6d6fa1_1080p_video_video_panel;
+		panelstruct->commandpanel = &s6d6fa1_1080p_video_command_panel;
+		panelstruct->state        = &s6d6fa1_1080p_video_state;
+		panelstruct->laneconfig   = &s6d6fa1_1080p_video_lane_config;
+		panelstruct->paneltiminginfo
+			= &s6d6fa1_1080p_video_timing_info;
+		panelstruct->panelresetseq
+			= &s6d6fa1_1080p_video_panel_reset_seq;
+		panelstruct->backlightinfo = &s6d6fa1_1080p_video_backlight;
+		pinfo->mipi.panel_cmds
+			= s6d6fa1_1080p_video_on_command;
+		pinfo->mipi.num_of_panel_cmds
+			= S6D6FA1_1080P_VIDEO_ON_COMMAND;
+		memcpy(phy_db->timing,
+			s6d6fa1_1080p_video_timings, TIMING_SIZE);
+		pinfo->mipi.signature = S6D6FA1_1080P_VIDEO_SIGNATURE;
+		break;
 	case UNKNOWN_PANEL:
 		memset(panelstruct, 0, sizeof(struct panel_struct));
 		memset(pinfo->mipi.panel_cmds, 0, sizeof(struct mipi_dsi_cmd));
@@ -300,10 +324,10 @@ bool oem_panel_select(const char *panel_name, struct panel_struct *panelstruct,
 	case HW_PLATFORM_SURF:
 		switch (auto_pan_loop) {
 		case 0:
-			panel_id = OTM1902B_1080P_CMD_PANEL;
+			panel_id = S6D6FA1_1080P_VIDEO_PANEL;
 			break;
 		case 1:
-			panel_id = TOSHIBA_720P_VIDEO_PANEL;
+			panel_id = OTM1902B_1080P_CMD_PANEL;
 			break;
 		case 2:
 			panel_id = GENERIC_720P_CMD_PANEL;
