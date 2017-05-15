@@ -252,6 +252,7 @@ static void init_panel_data(struct panel_struct *panelstruct,
 			= OTM1902B_1080P_CMD_ON_COMMAND;
 		memcpy(phy_db->timing,
 			otm1902b_1080p_cmd_timings, TIMING_SIZE);
+		pinfo->mipi.signature =  OTM1902B_1080P_VIDEO_SIGNATURE;
 		break;
 	case S6D6FA1_1080P_VIDEO_PANEL:
 		panelstruct->paneldata    = &s6d6fa1_1080p_video_panel_data;

@@ -204,6 +204,6 @@ static struct backlight otm1902b_1080p_cmd_backlight = {
   1, 0, 255, 100, 2, "PMIC_8941"
 };
 
-
+#define OTM1902B_1080P_VIDEO_SIGNATURE 0xFFFF
 
 #endif /*_PANEL_OTM1902B_1080P_CMD_H_*/
