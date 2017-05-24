@@ -47,14 +47,14 @@
 
 static struct panel_config s6d6fa1_1080p_video_panel_data = {
   "qcom,mdss_dsi_s6d6fa1_1080p_video", "dsi:0:", "qcom,mdss-dsi-panel",
-  10, 0, "DISPLAY_1", 0, 424000000, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+  10, 0, "DISPLAY_1", 0, 424000000, 57, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
 /*---------------------------------------------------------------------------*/
 /* Panel resolution                                                          */
 /*---------------------------------------------------------------------------*/
 static struct panel_resolution s6d6fa1_1080p_video_panel_res = {
-  1080, 1920, 152, 54, 12, 0, 4, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0
+  1080, 1920, 216, 52, 16, 0, 4, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
 /*---------------------------------------------------------------------------*/
@@ -360,7 +360,7 @@ static struct mipi_dsi_cmd s6d6fa1_1080p_video_on_command[] = {
 { 0x8 , s6d6fa1_1080p_video_on_cmd2 ,0x00},
 { 0x8 , s6d6fa1_1080p_video_on_cmd3 ,0x00},
 { 0x4 , s6d6fa1_1080p_video_on_cmd4 ,0x78},
-{ 0x4 , s6d6fa1_1080p_video_on_cmd5 ,0x00},
+{ 0x4 , s6d6fa1_1080p_video_on_cmd5 ,0x28},
 };
 #define S6D6FA1_1080P_VIDEO_ON_COMMAND 32
 
