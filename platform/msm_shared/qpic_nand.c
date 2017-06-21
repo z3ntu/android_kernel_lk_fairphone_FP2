@@ -1296,6 +1296,12 @@ qpic_nand_init(struct qpic_nand_init_config *config)
 }
 
 unsigned
+flash_num_pages_per_blk(void)
+{
+	return flash.num_pages_per_blk;
+}
+
+unsigned
 flash_page_size(void)
 {
 	return flash.page_size;
