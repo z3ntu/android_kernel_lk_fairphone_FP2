@@ -431,6 +431,7 @@ static struct backlight s6d6fa1_1080p_video_backlight = {
 };
 
 
-#define S6D6FA1_1080P_VIDEO_SIGNATURE 0x210000
+#define S6D6FA1_1080P_VIDEO_SIGNATURE       0x21F500
+#define S6D6FA1_1080P_VIDEO_SIGNATURE_PROTO 0x210000
 
 #endif /*_PANEL_S6D6FA1_1080P_VIDEO_H_*/

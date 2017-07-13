@@ -63,6 +63,7 @@ JDI_QHD_DUALDSI_VIDEO_PANEL,
 JDI_QHD_DUALDSI_CMD_PANEL,
 OTM1902B_1080P_CMD_PANEL,
 S6D6FA1_1080P_VIDEO_PANEL,
+S6D6FA1_1080P_VIDEO_PANEL_PROTO,
 UNKNOWN_PANEL
 };
 
@@ -79,6 +80,7 @@ static struct panel_list supp_panels[] = {
 	{"jdi_qhd_dualdsi_cmd", JDI_QHD_DUALDSI_CMD_PANEL},
 	{"otm1902b_1080p_cmd",OTM1902B_1080P_CMD_PANEL},
 	{"s6d6fa1_1080p_video", S6D6FA1_1080P_VIDEO_PANEL},
+	{"s6d6fa1_1080p_video_proto", S6D6FA1_1080P_VIDEO_PANEL_PROTO},
 };
 
 static uint32_t panel_id;
@@ -255,6 +257,7 @@ static void init_panel_data(struct panel_struct *panelstruct,
 		pinfo->mipi.signature =  OTM1902B_1080P_VIDEO_SIGNATURE;
 		break;
 	case S6D6FA1_1080P_VIDEO_PANEL:
+	case S6D6FA1_1080P_VIDEO_PANEL_PROTO:
 		panelstruct->paneldata    = &s6d6fa1_1080p_video_panel_data;
 		panelstruct->panelres     = &s6d6fa1_1080p_video_panel_res;
 		panelstruct->color        = &s6d6fa1_1080p_video_color;
@@ -282,6 +285,9 @@ static void init_panel_data(struct panel_struct *panelstruct,
 		memset(phy_db->timing, 0, TIMING_SIZE);
 		pinfo->mipi.signature = 0;
 		break;
+	}
+	if (S6D6FA1_1080P_VIDEO_PANEL_PROTO == panel_id) {
+		pinfo->mipi.signature = S6D6FA1_1080P_VIDEO_SIGNATURE_PROTO;
 	}
 }
 
@@ -328,9 +334,12 @@ bool oem_panel_select(const char *panel_name, struct panel_struct *panelstruct,
 			panel_id = S6D6FA1_1080P_VIDEO_PANEL;
 			break;
 		case 1:
-			panel_id = OTM1902B_1080P_CMD_PANEL;
+			panel_id = S6D6FA1_1080P_VIDEO_PANEL_PROTO;
 			break;
 		case 2:
+			panel_id = OTM1902B_1080P_CMD_PANEL;
+			break;
+		case 3:
 			panel_id = GENERIC_720P_CMD_PANEL;
 			break;
 		default:
