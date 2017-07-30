@@ -364,8 +364,18 @@ static int msm8974_edp_panel_power(int enable)
 	return 0;
 }
 
+#define NO_PANEL_CONFIG "none"
+
 void target_display_init(const char *panel_name)
 {
+	panel_name += strspn(panel_name, " ");
+
+	// Don't enable the panel when panel_name is "none"
+	if (!strcmp(panel_name, NO_PANEL_CONFIG)) {
+		dprintf(INFO, "Selected panel: %s\nSkip panel configuration\n",
+			panel_name);
+		return;
+	}
 	uint32_t hw_id = board_hardware_id();
 	uint32_t panel_loop = 0;
 	uint32_t ret = 0;
