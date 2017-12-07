@@ -2519,6 +2519,7 @@ struct fbimage* fetch_image_from_partition()
 	} else {
 		return splash_screen_flash();
 	}
+	//return NULL;
 }
 
 /* Get the size from partiton name */
