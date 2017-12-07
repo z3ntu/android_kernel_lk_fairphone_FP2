@@ -825,6 +825,7 @@ int boot_linux_from_mmc(void)
 		goto unified_boot;
 	}
 	if (!boot_into_recovery) {
+		fbcon_putc_factor_str("Booting into boot...", FBCON_RED_MSG, 4);
 		index = partition_get_index("boot");
 		ptn = partition_get_offset(index);
 		if(ptn == 0) {
@@ -833,6 +834,7 @@ int boot_linux_from_mmc(void)
 		}
 	}
 	else {
+		fbcon_putc_factor_str("Booting into recovery...", FBCON_RED_MSG, 4);
 		index = partition_get_index("recovery");
 		ptn = partition_get_offset(index);
 		if(ptn == 0) {
@@ -2640,6 +2642,14 @@ void aboot_fastboot_register_commands(void)
 			(const char *) panel_display_mode);
 }
 
+void fbcon_putc_factor_str(char str[], int type, unsigned scale_factor)
+{
+	int i;
+	for(i = 0; i < strlen(str); i++) {
+		fbcon_putc_factor(str[i], type, scale_factor);
+	}
+}
+
 void aboot_init(const struct app_descriptor *app)
 {
 	unsigned reboot_mode = 0;
@@ -2754,6 +2764,7 @@ void aboot_init(const struct app_descriptor *app)
 	}
 
 	/* We are here means regular boot did not happen. Start fastboot. */
+	fbcon_putc_factor_str("Booting into fastboot...", FBCON_RED_MSG, 4);
 
 	/* register aboot specific fastboot commands */
 	aboot_fastboot_register_commands();
